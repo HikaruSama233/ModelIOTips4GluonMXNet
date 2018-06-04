@@ -13,7 +13,7 @@ net = gluon.nn.SymbolBlock(
             outputs = mx.sym.load('model.json'),
             inputs = [mx.sym.Variable('data'), mx.sym.Variable('data2')]   ## It depends on the inputs of network.
         )
-net.load_params(model_params, ctx = mx.cpu())  ## or mx.gpu() if you want.
+net.load_params('model.params', ctx = mx.cpu())  ## or mx.gpu() if you want.
 
 ## Then we can use this network like this
 
@@ -28,10 +28,14 @@ net(data1, data2)   ## data1 and data2 are NDArrays. They are inputs of the netw
 
 x = mx.sym.var('data')
 x2 = mx.sym.var('data2')
-y= net(x, x2)  ## net is The Network
+y= net(x, x2)  ## net is The HybridSequential blocks
 y.save('model.json')   ## save network structure to json file
 
 model_params = net.collect_params()
 model_params.save('model.params') ## save parameters
+
+#######################################
+## It is replaced by 'export' function
+net.export('model')
 
 ```
